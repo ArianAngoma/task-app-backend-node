@@ -8,12 +8,23 @@ class Server {
         this.app = express();
         this.port = process.env.PORT;
 
+        this.path = {
+            auth: '/api/auth'
+        }
+
         /* Conexión a la DB */
         this.connectDB();
+
+        // Rutas de la app
+        this.routes();
     }
 
     async connectDB() {
         await dbConnection();
+    }
+
+    routes() {
+        this.app.use(this.path.auth, require('../routes/auth'));
     }
 
     listen() {
