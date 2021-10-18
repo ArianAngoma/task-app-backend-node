@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 
 /* Importaciones propias */
 const {dbConnection} = require('../database/config');
@@ -15,12 +16,26 @@ class Server {
         /* Conexión a la DB */
         this.connectDB();
 
+        // Middlewares
+        this.middlewares();
+
         // Rutas de la app
         this.routes();
     }
 
     async connectDB() {
         await dbConnection();
+    }
+
+    middlewares() {
+        /* CORS */
+        this.app.use(cors());
+
+        // Lectura y parseo del body
+        this.app.use(express.json());
+
+        // Directorio público
+        this.app.use(express.static('src/public'));
     }
 
     routes() {
