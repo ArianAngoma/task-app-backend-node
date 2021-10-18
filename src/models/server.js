@@ -1,9 +1,19 @@
 const express = require('express');
 
+/* Importaciones propias */
+const {dbConnection} = require('../database/config');
+
 class Server {
     constructor() {
         this.app = express();
         this.port = process.env.PORT;
+
+        /* Conexión a la DB */
+        this.connectDB();
+    }
+
+    async connectDB() {
+        await dbConnection();
     }
 
     listen() {
