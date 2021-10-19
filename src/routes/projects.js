@@ -7,7 +7,7 @@ const {Router} = require('express');
 const {check} = require('express-validator');
 
 /* Importaciones propias */
-const {createProject} = require('../controllers/projects');
+const {createProject, getProjectsByUser} = require('../controllers/projects');
 const {validateFields} = require('../middlewares/validate-fields');
 const {validateJwt} = require('../middlewares/validate-jwt');
 
@@ -22,5 +22,8 @@ router.post('/', [
     check('name', 'El nombre es obligatorio').notEmpty(),
     validateFields
 ], createProject);
+
+/* Obtener todos los proyectos por usuario */
+router.get('/', [validateFields], getProjectsByUser);
 
 module.exports = router;

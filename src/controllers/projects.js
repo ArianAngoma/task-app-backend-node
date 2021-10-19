@@ -28,6 +28,27 @@ const createProject = async (req, res) => {
     });
 }
 
+/* Obtener todos los proyectos por usuario */
+const getProjectsByUser = async (req, res) => {
+    const {_id} = req.user;
+
+    try {
+        const projects = await Project.find({creator: _id}).sort({created: -1});
+
+        res.status(201).json({
+            ok: true,
+            projects
+        });
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el Administrador'
+        });
+    }
+}
+
 module.exports = {
-    createProject
+    createProject,
+    getProjectsByUser
 }
