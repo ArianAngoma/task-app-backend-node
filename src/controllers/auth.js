@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 
 /* Importaciones propias */
 const User = require('../models/User');
+const {generateJWT} = require('../helpers/jwt');
 
 const createUser = async (req, res) => {
     const {name, email, password} = req.body;
@@ -16,9 +17,13 @@ const createUser = async (req, res) => {
         /* Guardar en DB */
         await user.save();
 
+        /* Generar JWT */
+        const token = await generateJWT(user.id);
+
         res.status(201).json({
             ok: true,
-            user
+            user,
+            token
         });
     } catch (e) {
         console.log(e);
