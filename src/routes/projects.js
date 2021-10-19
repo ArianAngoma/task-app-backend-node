@@ -7,7 +7,7 @@ const {Router} = require('express');
 const {check} = require('express-validator');
 
 /* Importaciones propias */
-const {createProject, getProjectsByUser, updateProject} = require('../controllers/projects');
+const {createProject, getProjectsByUser, updateProject, deleteProject} = require('../controllers/projects');
 const {validateFields} = require('../middlewares/validate-fields');
 const {validateJwt} = require('../middlewares/validate-jwt');
 const {projectExistByIdAndUserIsToken} = require('../helpers/db-validators');
@@ -33,5 +33,12 @@ router.put('/:id', [
     check('id').custom(projectExistByIdAndUserIsToken),
     validateFields
 ], updateProject);
+
+/* Eliminar un proyecto por id */
+router.delete('/:id', [
+    check('id', 'No es un ID válido').isMongoId(),
+    check('id').custom(projectExistByIdAndUserIsToken),
+    validateFields
+], deleteProject);
 
 module.exports = router;
