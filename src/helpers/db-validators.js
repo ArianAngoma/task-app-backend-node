@@ -1,6 +1,7 @@
 /* Importaciones propias */
 const User = require('../models/User');
 const Project = require('../models/Project');
+const Task = require('../models/Task');
 
 // users => Valida si email ya esta registrado en la DB
 const emailExists = async (email = '') => {
@@ -9,11 +10,12 @@ const emailExists = async (email = '') => {
 }
 
 // projects => Valida si existe un proyecto por id y si es el mismo usuario quien lo creó
-const projectExistByIdAndUserIsToken = async (id, {req}) => {
-    const existsEvent = await Project.findById(id);
+const projectExistByIdAndUserIsToken = async (value, {req}) => {
+    // console.log(value);
+    const existsProject = await Project.findById(value);
 
-    if (!existsEvent) throw new Error(`El evento con ${id} no existe`);
-    if (existsEvent.creator.toString() !== req.user.id) throw new Error(`No tiene privilegio de editar/eliminar el evento con id ${id}`);
+    if (!existsProject) throw new Error(`El proyecto con ${value} no existe`);
+    if (existsProject.creator.toString() !== req.user.id) throw new Error(`No autorizado`);
 }
 
 module.exports = {
