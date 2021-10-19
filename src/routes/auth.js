@@ -7,9 +7,10 @@ const {Router} = require('express');
 const {check} = require('express-validator');
 
 /* Importaciones propias */
-const {createUser, signIn} = require('../controllers/auth');
+const {createUser, signIn, renewToken} = require('../controllers/auth');
 const {validateFields} = require('../middlewares/validate-fields');
 const {emailExists} = require('../helpers/db-validators');
+const {validateJwt} = require('../middlewares/validate-jwt');
 
 /* Configuración de Router */
 const router = Router();
@@ -29,5 +30,8 @@ router.post('/sign-in', [
     check('password', 'El password es obligatorio').notEmpty(),
     validateFields
 ], signIn);
+
+/* Renovar Token de usuario */
+router.get('/renew-token', [validateJwt], renewToken);
 
 module.exports = router;
