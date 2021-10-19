@@ -7,9 +7,10 @@ const {Router} = require('express');
 const {check} = require('express-validator');
 
 /* Importaciones propias */
-const {createProject, getProjectsByUser} = require('../controllers/projects');
+const {createProject, getProjectsByUser, updateProject} = require('../controllers/projects');
 const {validateFields} = require('../middlewares/validate-fields');
 const {validateJwt} = require('../middlewares/validate-jwt');
+const {projectExistByIdAndUserIsToken} = require('../helpers/db-validators');
 
 /* Configuración de Router */
 const router = Router();
@@ -24,6 +25,13 @@ router.post('/', [
 ], createProject);
 
 /* Obtener todos los proyectos por usuario */
-router.get('/', [validateFields], getProjectsByUser);
+router.get('/', getProjectsByUser);
+
+/* Actualizar un proyecto por id */
+router.put('/:id', [
+    check('id', 'No es un ID válido').isMongoId(),
+    check('id').custom(projectExistByIdAndUserIsToken),
+    validateFields
+], updateProject);
 
 module.exports = router;

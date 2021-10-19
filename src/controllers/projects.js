@@ -48,7 +48,30 @@ const getProjectsByUser = async (req, res) => {
     }
 }
 
+/* Actualizar proyecto por id */
+const updateProject = async (req, res) => {
+    const {id} = req.params;
+
+    const {user, ...data} = req.body;
+    data.creator = req.user._id;
+
+    try {
+        const project = await Project.findByIdAndUpdate(id, data, {new: true});
+        res.status(201).json({
+            ok: true,
+            project
+        });
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el Administrador'
+        });
+    }
+}
+
 module.exports = {
     createProject,
-    getProjectsByUser
+    getProjectsByUser,
+    updateProject
 }
