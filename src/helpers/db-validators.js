@@ -18,7 +18,18 @@ const projectExistByIdAndUserIsToken = async (value, {req}) => {
     if (existsProject.creator.toString() !== req.user.id) throw new Error(`No autorizado`);
 }
 
+// tasks => Valida si existe una tarea por id y si es el mismo usuario quien lo creó
+const taskExistsByIdAndUserIsToken = async (id, {req}) => {
+    const existsTask = await Task.findById(id);
+
+    if (!existsTask) throw new Error(`La tarea con id ${id} no existe`);
+
+    const {creator} = await Project.findById(existsTask.project);
+    if (creator.toString() !== req.user.id) throw new Error(`No autorizado`);
+}
+
 module.exports = {
     emailExists,
-    projectExistByIdAndUserIsToken
+    projectExistByIdAndUserIsToken,
+    taskExistsByIdAndUserIsToken
 }

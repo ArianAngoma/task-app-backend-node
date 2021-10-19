@@ -7,10 +7,10 @@ const {Router} = require('express');
 const {check, body} = require('express-validator');
 
 /* Importaciones propias */
-const {createTask, getTasksByProject} = require('../controllers/tasks');
+const {createTask, getTasksByProject, updateTask} = require('../controllers/tasks');
 const {validateJwt} = require('../middlewares/validate-jwt');
 const {validateFields} = require('../middlewares/validate-fields');
-const {projectExistByIdAndUserIsToken} = require('../helpers/db-validators');
+const {projectExistByIdAndUserIsToken, taskExistsByIdAndUserIsToken} = require('../helpers/db-validators');
 
 /* Configuración de Router */
 const router = Router();
@@ -32,5 +32,12 @@ router.get('/', [
     body('project').custom(projectExistByIdAndUserIsToken),
     validateFields
 ], getTasksByProject);
+
+/* Actualizar tarea */
+router.put('/:id', [
+    check('id', 'No es id de Mongo válido').isMongoId(),
+    check('id').custom(taskExistsByIdAndUserIsToken),
+    validateFields
+], updateTask);
 
 module.exports = router;

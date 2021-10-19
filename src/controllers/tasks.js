@@ -43,7 +43,29 @@ const getTasksByProject = async (req, res) => {
     }
 }
 
+/* Actualizar tarea */
+const updateTask = async (req, res) => {
+    const {id} = req.params;
+
+    const {project, ...data} = req.body;
+
+    try {
+        const task = await Task.findByIdAndUpdate(id, data, {new: true});
+        res.status(201).json({
+            ok: true,
+            task
+        });
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el Administrador'
+        });
+    }
+}
+
 module.exports = {
     createTask,
-    getTasksByProject
+    getTasksByProject,
+    updateTask
 }
