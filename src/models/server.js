@@ -11,7 +11,8 @@ class Server {
 
         this.path = {
             auth: '/api/auth',
-            project: '/api/project'
+            project: '/api/project',
+            task: '/api/task'
         }
 
         /* Conexión a la DB */
@@ -42,6 +43,7 @@ class Server {
     routes() {
         this.app.use(this.path.auth, require('../routes/auth'));
         this.app.use(this.path.project, require('../routes/projects'));
+        this.app.use(this.path.task, require('../routes/tasks'));
     }
 
     listen() {
