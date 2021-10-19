@@ -24,6 +24,26 @@ const createTask = async (req, res) => {
     }
 }
 
+/* Obtener tareas por proyecto */
+const getTasksByProject = async (req, res) => {
+    const {project} = req.body;
+
+    try {
+        const tasks = await Task.find({project});
+        res.status(201).json({
+            ok: true,
+            tasks
+        });
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el Administrador'
+        });
+    }
+}
+
 module.exports = {
-    createTask
+    createTask,
+    getTasksByProject
 }
