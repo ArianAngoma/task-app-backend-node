@@ -22,10 +22,6 @@ const createProject = async (req, res) => {
             msg: 'Hable con el Administrador'
         });
     }
-
-    res.status(201).json({
-        ok: true
-    });
 }
 
 /* Obtener todos los proyectos por usuario */

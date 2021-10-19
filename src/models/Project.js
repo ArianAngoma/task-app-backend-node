@@ -1,5 +1,8 @@
 const {Schema, model} = require('mongoose');
 
+/* Importaciones propias */
+const Task = require('./Task');
+
 const ProjectSchema = new Schema({
     name: {
         type: String,
@@ -22,5 +25,18 @@ ProjectSchema.methods.toJSON = function () {
     project.uid = _id;
     return project;
 }
+
+/* Eliminar documentos relacionados */
+ProjectSchema.pre('findOneAndDelete', async function (next) {
+    const {_id} = this.getFilter();
+    // console.log(_id);
+    await Task.deleteMany({project: _id}).exec();
+    next();
+});
+
+/*ProjectSchema.post('findOneAndDelete', async function (doc) {
+    // console.log(doc._id);
+    await Task.deleteMany({project: doc._id}).exec();
+});*/
 
 module.exports = model('Project', ProjectSchema);
