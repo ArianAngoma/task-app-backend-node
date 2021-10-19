@@ -64,8 +64,27 @@ const updateTask = async (req, res) => {
     }
 }
 
+/* Eliminar tarea por id */
+const deleteTask = async (req, res) => {
+    const {id} = req.params;
+
+    try {
+        const task = await Task.findByIdAndDelete(id);
+        res.status(201).json({
+            ok: true
+        });
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el Administrador'
+        });
+    }
+}
+
 module.exports = {
     createTask,
     getTasksByProject,
-    updateTask
+    updateTask,
+    deleteTask
 }
