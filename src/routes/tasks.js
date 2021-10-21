@@ -4,7 +4,7 @@
 * */
 
 const {Router} = require('express');
-const {check, body} = require('express-validator');
+const {check, body, param} = require('express-validator');
 
 /* Importaciones propias */
 const {createTask, getTasksByProject, updateTask, deleteTask} = require('../controllers/tasks');
@@ -27,9 +27,9 @@ router.post('/', [
 ], createTask);
 
 /* Obtener tareas por proyecto */
-router.get('/', [
+router.get('/:project', [
     check('project', 'No es id de Mongo válido').isMongoId(),
-    body('project').custom(projectExistByIdAndUserIsToken),
+    param('project').custom(projectExistByIdAndUserIsToken),
     validateFields
 ], getTasksByProject);
 

@@ -26,7 +26,7 @@ const createTask = async (req, res) => {
 
 /* Obtener tareas por proyecto */
 const getTasksByProject = async (req, res) => {
-    const {project} = req.body;
+    const {project} = req.params;
 
     try {
         const tasks = await Task.find({project});
